@@ -12,12 +12,15 @@ Great tutorial on using Brownie to develop, interact, and test smart contracts. 
 
 Large focus on testing using `pytest` in the later chapters, drives home the importance of strong testing in smart contract development. Also, chapters 1-10 require basic Python knowledge, but 11+ require some intermediate knowledge.
 
-The following are *my* notes as I went through the tutorial. This is **not** meant to be a summary nor replacement for the tutorials themselves. Instead, the notes will be used as reference for my future learning.
+The following are *my* notes as I went through the tutorial. This is **not** meant to be a summary nor replacement for the tutorials themselves. Instead, the notes will be used as reference for my future learning (and hopefully yours too!).
 
 ## Links
 [The tutorial](https://www.youtube.com/playlist?list=PLVOHzVzbg7bFUaOGwN0NOgkTItUAVyBBQ).
+
 [Github repo](https://github.com/curvefi/brownie-tutorial).
+
 [Brownie docs](https://eth-brownie.readthedocs.io/en/stable/).
+
 [Curve docs](https://curve.readthedocs.io/).
 
 ### My installation issues
@@ -29,7 +32,7 @@ This only applies if your Mac short name (your user) has a dot in it (`first.las
 TLDR project path includes dotted filepath `/Users/first.last/Documents/brownie` and therefore cannot run. +1ed the PR hoping to get it fixed as well as sent a tweet @ the devs on Twitter. Hopefully a fix is implemented soon.
 A workaround (if the devs don't respond in time) is to fork the PR repo, rebase the PR branch w/ Curve master, and then install as my local brownie. This solved the issue.
 
-If you're doing this workaround, make sure to use virtualenv first `source venv/bin/activate` in order to use your new version of Brownie. See [this](https://github.com/eth-brownie/brownie/blob/master/CONTRIBUTING.md) page for more details.
+If you're doing this workaround, make sure to use virtualenv first `source venv/bin/activate` inside of the forked brownie repo in order to use your new version of Brownie. See [this](https://github.com/eth-brownie/brownie/blob/master/CONTRIBUTING.md) page for more details.
 
 ### 5. Transactions
 `brownie test tests/test_mint.py --interactive`. The interactive test flag sends you into a brownie console if a test fails at the moment of failure. This is unbelievably based.
@@ -75,7 +78,20 @@ Brownie cannot understand the gauge contract in isolation. Instead, have to crea
 ```python
 from brownie import interface
 contract = interface.<file_handle>(<contract_addr>)
+# ex:
+gauge_contract = interface.LiquidityGauge(gauge_addr)
 ```
+This is why later scripts employ the following to pull an abi using from_explorer if it doesn't exist, or load from local database:
+```python
+def load_contract(addr):
+    # pull contract if it exists, otherwise make an API call
+    try:
+        cont = Contract(addr)
+    except ValueError:
+        cont = Contract.from_explorer(addr)
+    return cont
+```
+
 
 ### 8. Fixture 1
 Brownie uses pytest.
@@ -137,3 +153,8 @@ Chapter on the Brownie [chain object](https://eth-brownie.readthedocs.io/en/stab
 `chain.undo()` and `chain.redo()` is especially useful during interactive test debugging. This is used to move backwards and forwards through recent transactions.
 
 This chapter goes over a way to determine all the possible meta 3pools that exist, and the LP returns over each one.
+
+### 12. Chain II
+The code we're making is abstract such that it can be used on any address or for any pool (w/ minimal configuration). Can try to extend this functionality later to other LPs such as Sushiswap.
+
+The dev notes that the incessant looping is the brute force method - much more elegant solutions can be employed by making use of the many registry functions. As a result, this code will take a while (and will make a lot of unnecessary infura calls).
