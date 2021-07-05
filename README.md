@@ -1,5 +1,5 @@
 # Brownie tutorial
-### Pre-cursors
+## Pre-cursors
 This series of tutorials assumes some familiarity with the following:
 - Python
 - working within the console
@@ -7,10 +7,18 @@ This series of tutorials assumes some familiarity with the following:
 
 Familiarity with smart contract development is not strictly needed, but you will have to pause a couple of times and google/read articles.
 
-### TL;DR
-Great tutorial on using Brownie to develop, interact, and test smart contracts. Assumes some familiarity with various technologies and moves fast, but goes over all you need to start developing on Brownie. In short, covers everything about smart contract development *except* the contracts themselves.
+## TL;DR
+Great tutorial on using Brownie to develop, interact, and test smart contracts. Assumes some familiarity with various technologies and moves fast, but goes overall you need to start developing on Brownie. In short, covers everything about smart contract development *except* the contracts themselves.
 
-Large focus on testing using `pytest` in the later chapters, drives home the importance of strong testing in smart contract development.
+Large focus on testing using `pytest` in the later chapters, drives home the importance of strong testing in smart contract development. Also, chapters 1-10 require basic Python knowledge, but 11+ require some intermediate knowledge.
+
+The following are *my* notes as I went through the tutorial. This is **not** meant to be a summary nor replacement for the tutorials themselves. Instead, the notes will be used as reference for my future learning.
+
+## Links
+[The tutorial](https://www.youtube.com/playlist?list=PLVOHzVzbg7bFUaOGwN0NOgkTItUAVyBBQ).
+[Github repo](https://github.com/curvefi/brownie-tutorial).
+[Brownie docs](https://eth-brownie.readthedocs.io/en/stable/).
+[Curve docs](https://curve.readthedocs.io/).
 
 ### My installation issues
 
@@ -123,3 +131,9 @@ Integrative tests currently taking forever because I haven't provided an Ethersc
 
 ### 11. Chain I
 Chapter on the Brownie [chain object](https://eth-brownie.readthedocs.io/en/stable/core-chain.html).
+
+`chain.snapshot()` allows you to capture a specific time in the chain. You can run a bunch of transactions, and then rewind (`chain.revert()`) back to state of the chain at the time of the snapshot. The snapshot is never consumed, so you can rewind as often as needed.
+
+`chain.undo()` and `chain.redo()` is especially useful during interactive test debugging. This is used to move backwards and forwards through recent transactions.
+
+This chapter goes over a way to determine all the possible meta 3pools that exist, and the LP returns over each one.
